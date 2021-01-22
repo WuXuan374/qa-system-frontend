@@ -9,15 +9,23 @@ import {
 } from './style'
 import {
   options,
-} from './mockData'
+} from './mock/mockData'
 import { useState } from 'react'
+import axios from 'axios'
+import './mock/mockApi'
+import { apis } from './api/apis'
+
 
 
 function App() {
   const [question, setQuestion] = useState("")
 
   const onSearch = () => {
-    console.log(question)
+    axios.get(`${apis.answers}`,)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((reason) => console.error(reason))
   }
 
   const onClear = () => {
