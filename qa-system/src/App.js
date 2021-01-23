@@ -12,16 +12,17 @@ import {
 } from './mock/mockData'
 import { useState } from 'react'
 import axios from 'axios'
-import './mock/mockApi'
-import { apis } from './api/apis'
+// import './mock/mockApi'
+import { apis, prefix } from './api/apis'
 
 
-
+// 生成路径的过程可以自动化：比如GET方法自动把参数写成?question="" / 配置文件中配置前缀 
 function App() {
   const [question, setQuestion] = useState("")
 
   const onSearch = () => {
-    axios.get(`${apis.answers}`,)
+    console.log('inside')
+    axios.get(`${prefix}${apis.answers}/?question=${question}`,)
       .then((res) => {
         console.log(res)
       })
