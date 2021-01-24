@@ -1,5 +1,5 @@
 import './App.css';
-import { AutoComplete, Button, PageHeader } from 'antd'
+import { AutoComplete, Button, PageHeader, Select } from 'antd'
 import {
   BodyContainer,
   ContentContainer,
@@ -7,13 +7,11 @@ import {
   QuestionTitle,
   ButtonsContainer,
 } from './style'
-import {
-  options,
-} from './mock/mockData'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 // import './mock/mockApi'
 import { apis, prefix } from './api/apis'
+const { Option } = Select
 
 // 生成路径的过程可以自动化：比如GET方法自动把参数写成?question="" / 配置文件中配置前缀 
 function App() {
@@ -26,8 +24,11 @@ function App() {
 
   const getKeywordsOptions = () => {
     axios.get(`${prefix}${apis.keywords}`)
-      .then((res) => {
-        setKeywords(res)
+      .then((response) => {
+        // res: [[tag, keyword]] e.g. [["地名", "新北市"], ["机构名", "重庆市兼善中学"],
+        const { data } = response
+        const { keywords } = data
+        setKeywords(keywords.map((item) => item[1]))
       })
       .catch((reason) => console.error(reason))
   }
@@ -58,12 +59,15 @@ function App() {
             value={question}
             style={{ width: 300}}
             placeholder="input here"
-            options={keywords}
+            // options={keywords}
             filterOption={(inputValue, option) => 
               option.value.includes(inputValue)
             }
             onChange={(data) => setQuestion(data)}
           >
+            {keywords.map((keyword) => 
+              <Option value={keyword} key={keyword}>{keyword}</Option>
+            )}
           </AutoComplete>
         </QuestionContainer>
         <ButtonsContainer>
