@@ -1,5 +1,5 @@
 import './App.css';
-import { AutoComplete, Button, PageHeader, Select } from 'antd'
+import { AutoComplete, Button, PageHeader, Select, message, Table } from 'antd'
 import {
   BodyContainer,
   ContentContainer,
@@ -8,43 +8,65 @@ import {
   ButtonsContainer,
 } from './style'
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 // import './mock/mockApi'
-import { apis, prefix } from './api/apis'
+import { 
+  apis, 
+  prefix, 
+  triggerAPIRequest,
+  HTTP_GET,
+  HTTP_POST,
+  HTTP_PUT,
+  HTTP_DELETE 
+} from './api/apiConfig'
 const { Option } = Select
 
 // 生成路径的过程可以自动化：比如GET方法自动把参数写成?question="" / 配置文件中配置前缀 
 function App() {
+  // hooks
   const [question, setQuestion] = useState("")
   const [keywords, setKeywords] = useState([])
+  const [answers, setAnswers] = useState([])
   
   useEffect(() =>
     getKeywordsOptions()
   , [])
 
+  // actions
   const getKeywordsOptions = () => {
-    axios.get(`${prefix}${apis.keywords}`)
-      .then((response) => {
-        // res: [[tag, keyword]] e.g. [["地名", "新北市"], ["机构名", "重庆市兼善中学"],
-        const { data } = response
+    triggerAPIRequest(`${prefix}${apis.keywords}`, HTTP_GET)
+      .then((data) => {
         const { keywords } = data
         setKeywords(keywords.map((item) => item[1]))
       })
-      .catch((reason) => console.error(reason))
   }
 
   const onSearch = () => {
-    console.log('inside')
-    axios.get(`${prefix}${apis.answers}/?question=${question}`,)
-      .then((res) => {
-        console.log(res)
+    triggerAPIRequest(`${prefix}${apis.answers}/?question=${question}`, HTTP_GET)
+      .then((data) => {
+        const { answers } = data
+        setAnswers(answers)
       })
-      .catch((reason) => console.error(reason))
   }
 
   const onClear = () => {
     setQuestion('')
   }
+
+  // table related
+  const columns = [
+    {
+      title: 'Rank',
+      render: (_text, _record, index) => index + 1
+    },
+    {
+      title: 'Answer',
+      dataIndex: 'answer',
+    },
+    {
+      title: 'Score',
+      dataIndex: 'score'
+    }
+  ]
  
   return (
     <BodyContainer>
@@ -59,7 +81,6 @@ function App() {
             value={question}
             style={{ width: 300}}
             placeholder="input here"
-            // options={keywords}
             filterOption={(inputValue, option) => 
               option.value.includes(inputValue)
             }
@@ -80,6 +101,10 @@ function App() {
           </Button>
           <Button onClick={onClear}>clear</Button>
         </ButtonsContainer>
+        <Table
+          dataSource={answers}
+          columns={columns}
+        />
       </ContentContainer>
     </BodyContainer>
   );
