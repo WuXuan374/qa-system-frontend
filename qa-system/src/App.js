@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react'
 // import './mock/mockApi'
 import { 
   apis, 
-  prefix, 
   triggerAPIRequest,
   HTTP_GET,
   HTTP_POST,
@@ -33,7 +32,7 @@ function App() {
 
   // actions
   const getKeywordsOptions = () => {
-    triggerAPIRequest(`${prefix}${apis.keywords}`, HTTP_GET)
+    triggerAPIRequest(`${apis.keywords}`, HTTP_GET)
       .then((data) => {
         const { keywords } = data
         setKeywords(keywords.map((item) => item[1]))
@@ -41,7 +40,7 @@ function App() {
   }
 
   const onSearch = () => {
-    triggerAPIRequest(`${prefix}${apis.answers}/?question=${question}`, HTTP_GET)
+    triggerAPIRequest(`${apis.answers}/?question=${question}`, HTTP_GET)
       .then((data) => {
         const { answers } = data
         setAnswers(answers)
@@ -61,6 +60,10 @@ function App() {
     {
       title: 'Answer',
       dataIndex: 'answer',
+    },
+    {
+      title: 'Document title',
+      dataIndex: 'document_title',
     },
     {
       title: 'Score',
