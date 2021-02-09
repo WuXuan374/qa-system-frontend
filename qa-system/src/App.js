@@ -67,7 +67,11 @@ function App() {
     },
     {
       title: 'Score',
-      dataIndex: 'score'
+      dataIndex: 'score',
+    },
+    {
+      title: 'Concrete answer',
+      dataIndex: 'concrete_answer',
     }
   ]
  
