@@ -38,7 +38,7 @@ const AnswerBox = (props) => {
       </DocumentTitle>
       <Score>该答案的得分为{score.toFixed(2)}</Score>
       <Answer>
-        {answer.split(/[,.，。]+/).map((para) => <p>{para}</p>)}
+        {answer.split(/[,，。]+/).map((para) => <p>{para}</p>)}
       </Answer>
       {concrete_answer? <p><b>总结:{concrete_answer}</b></p> : <></>}
     </AnswerContainer>
@@ -61,7 +61,7 @@ function App() {
     triggerAPIRequest(`${apis.keywords}`, HTTP_GET)
       .then((data) => {
         const { keywords } = data
-        setKeywords(keywords.map((item) => item[1]))
+        setKeywords(keywords)
       })
   }
 
