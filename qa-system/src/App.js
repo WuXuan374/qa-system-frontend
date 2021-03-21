@@ -49,19 +49,19 @@ const AnswerBox = (props) => {
 function App() {
   // hooks
   const [question, setQuestion] = useState("")
-  const [keywords, setKeywords] = useState([])
+  const [hints, setHints] = useState([])
   const [answers, setAnswers] = useState([])
   
   useEffect(() =>
-    getKeywordsOptions()
+    getHints()
   , [])
 
   // actions
-  const getKeywordsOptions = () => {
-    triggerAPIRequest(`${apis.keywords}`, HTTP_GET)
+  const getHints = () => {
+    triggerAPIRequest(`${apis.hints}`, HTTP_GET)
       .then((data) => {
-        const { keywords } = data
-        setKeywords(keywords)
+        const { hints } = data
+        setHints(hints)
       })
   }
 
@@ -150,12 +150,13 @@ function App() {
             style={{ width: 300, color: '#121212' }}
             placeholder="请输入你的问题"
             filterOption={(inputValue, option) => 
-              option.value.includes(inputValue)
+              // 大小写不敏感
+              option.value.toLowerCase().includes(inputValue.toLowerCase())
             }
             onChange={(data) => setQuestion(data)}
           >
-            {keywords.map((keyword) => 
-              <Option value={keyword} key={keyword}>{keyword}</Option>
+            {hints.map((hint) => 
+              <Option value={hint} key={hint}>{hint}</Option>
             )}
           </AutoComplete>
           <ButtonsContainer>

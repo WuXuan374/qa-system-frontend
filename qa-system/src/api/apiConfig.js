@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom'
 
 export const apis = {
   answers: 'api/answers',
-  keywords: 'api/keywords',
+  hints: 'api/hints',
 }
 
 // HTTP_actions
