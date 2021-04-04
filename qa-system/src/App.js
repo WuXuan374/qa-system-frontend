@@ -29,18 +29,18 @@ const { Option } = Select
 const { Header, Content, Footer } = Layout
 
 const AnswerBox = (props) => {
-  const { answer, score, document_title, concrete_answer } = props
+  const { answer, first_score, document_title, concrete_answer } = props
   return (
     <AnswerContainer>
       <DocumentTitle>
         <FileOutlined />
         来自文章 {document_title}
       </DocumentTitle>
-      <Score>该答案的得分为{score.toFixed(2)}</Score>
+      <Score>该答案的检索得分为{first_score.toFixed(2)}</Score>
       <Answer>
         {answer.split(/[,，。]+/).map((para) => <p>{para}</p>)}
       </Answer>
-      {concrete_answer? <p><b>总结:{concrete_answer}</b></p> : <></>}
+      {concrete_answer?<b>总结:{concrete_answer.split(/[,，。]+/).map((para) => <p>{para}</p>)}</b> : <></>}
     </AnswerContainer>
   )
 }
@@ -184,7 +184,7 @@ function App() {
             answers.map((item) => 
               <AnswerBox 
                 answer={item.answer}
-                score={item.score}
+                first_score={item.first_score}
                 document_title={item.document_title}
                 concrete_answer={item.concrete_answer}
               />
