@@ -6,8 +6,8 @@ import axios from 'axios'
 import ReactDOM from 'react-dom'
 
 export const apis = {
-  answers: 'api/answers',
-  hints: 'api/hints',
+  answers: 'qa/answers',
+  hints: 'qa/hints',
 }
 
 // HTTP_actions
