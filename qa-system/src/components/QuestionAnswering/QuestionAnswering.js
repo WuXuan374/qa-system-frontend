@@ -7,6 +7,7 @@ import {
   DocumentTitle,
   Score,
   Answer,
+  ContentContainer,
 } from './style';
 import { SearchOutlined, FileOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
@@ -122,16 +123,19 @@ const QuestionAnswering = () => {
         </Card>
 
         <Card style={{ margin: 10, minHeight: 400 }}>
-          {
-            answers.map((item) => 
-              <AnswerBox 
-                answer={item.answer}
-                first_score={item.first_score}
-                document_title={item.document_title}
-                concrete_answer={item.concrete_answer}
-              />
-            )
-          }
+          <ContentContainer>
+            {
+              answers.map((item) => 
+                <AnswerBox 
+                  answer={item.answer}
+                  first_score={item.first_score}
+                  document_title={item.document_title}
+                  concrete_answer={item.concrete_answer}
+                />
+              )
+            }
+          </ContentContainer>
+          
         </Card>
       </BodyContainer>
       
