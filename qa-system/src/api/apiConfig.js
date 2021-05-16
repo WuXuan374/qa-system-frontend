@@ -8,6 +8,9 @@ import ReactDOM from 'react-dom'
 export const apis = {
   answers: 'qa/answers',
   hints: 'qa/hints',
+  model: {
+    evaluation: 'model/evaluation',
+  }
 }
 
 // HTTP_actions

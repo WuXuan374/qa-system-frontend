@@ -4,23 +4,15 @@ export const BodyContainer = styled.div`
 	color: #121212;
 	font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, 
 							Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif;
-	header.ant-layout-header {
-		background: #fff;
-		box-shadow: 0 1px 3px rgb(18 18 18 / 10%);
-		display: flex;
-	}
-	header.ant-layout-header > span {
-		width: 30%;
-	}
-	header.ant-layout-header > div.ant-select-auto-complete {
+	.body-header div.ant-select-auto-complete {
 		width: 30%;
 		margin: auto 0;
 	}
-	header.ant-layout-header > div.ant-select-auto-complete > .ant-select-selector {
+	.body-header div.ant-select-auto-complete > .ant-select-selector {
 		border-radius: 25px;
 		background: #f5f5f5;
 	}
-	header.ant-layout-header > div.ant-select-focused > .ant-select-selector {
+	.body-header div.ant-select-focused > .ant-select-selector {
 		background: #fff;
 	}
 `
