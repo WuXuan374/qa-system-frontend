@@ -53,6 +53,8 @@ export const DocumentTitle = styled.div`
 	color: #444;
 	font-weight: 600;
 	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between; 
 `
 export const Score = styled.div`
 	color: #76839b;

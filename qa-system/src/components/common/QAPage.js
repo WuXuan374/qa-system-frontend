@@ -2,8 +2,9 @@ import { Layout, Menu } from 'antd';
 import { useState } from 'react';
 import {
   DesktopOutlined,
-  PieChartOutlined,
-  UserOutlined,
+  HeartFilled,
+  SearchOutlined,
+  GoldOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
@@ -29,13 +30,13 @@ function QAPage(props) {
           style={{ height: '100%', borderRight: 0 }}
           defaultOpenKeys={['sub1']}
         >
-          <Menu.Item key="/qa" icon={<PieChartOutlined />}>
+          <Menu.Item key="/qa" icon={<SearchOutlined style={{ color: '#0b8235', fontSize: 18 }} />}>
             <Link to="/qa">我要提问</Link>
           </Menu.Item>
-          <Menu.Item key="/history" icon={<DesktopOutlined />}>
-            <Link to="/history">历史问题</Link>
+          <Menu.Item key="/answers/favList" icon={<HeartFilled style={{ color: '#F81D52', fontSize: 18 }} />}>
+            <Link to="/answers/favList">我的收藏</Link>
           </Menu.Item>
-          <SubMenu key="sub1" icon={<UserOutlined />} title="模型">
+          <SubMenu key="sub1" icon={<GoldOutlined style={{ fontSize: 18, color: '#48C1FB' }} />} title="模型">
             <Menu.Item key="/model/create">
               <Link to="/model/create">模型创建</Link>
             </Menu.Item>

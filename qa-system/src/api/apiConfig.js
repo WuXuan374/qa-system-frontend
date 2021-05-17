@@ -6,12 +6,17 @@ import axios from 'axios'
 import ReactDOM from 'react-dom'
 
 export const apis = {
-  answers: 'qa/answers',
+  qa: 'qa/answers',
   hints: 'qa/hints',
   model: {
     evaluation: 'model/evaluation',
     detail: 'model/info',
     create: 'model/create',
+  },
+  answers: {
+    subscribe: 'answer/subscribe',
+    favList: 'answer/favList',
+    unSubscribe: 'answer/unSubscribe',
   }
 }
 

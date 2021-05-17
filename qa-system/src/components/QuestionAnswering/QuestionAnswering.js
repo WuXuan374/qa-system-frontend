@@ -1,5 +1,5 @@
 import '../../App.css';
-import { AutoComplete, Button, Select,  Layout, Breadcrumb, Card, Affix, Radio, Skeleton } from 'antd';
+import { AutoComplete, Button, Select,  Layout, Breadcrumb, Card, Affix, Radio, Skeleton, message as antdMessage, Empty } from 'antd';
 import {
   BodyContainer,
   ButtonsContainer,
@@ -9,12 +9,13 @@ import {
   Answer,
   ContentContainer,
 } from './style';
-import { SearchOutlined, FileOutlined } from '@ant-design/icons';
+import { SearchOutlined, FileOutlined, HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { 
   apis, 
   triggerAPIRequest,
   HTTP_GET,
+  HTTP_POST,
 } from '../../api/apiConfig';
 import QAPage from '../common/QAPage';
 const { Option } = Select
@@ -22,12 +23,39 @@ const { Option } = Select
 const { Header, Content, Footer } = Layout
 
 const AnswerBox = (props) => {
-  const { answer, first_score, document_title, concrete_answer } = props
+  const { question, answer, first_score, document_title, concrete_answer } = props;
+  const [subscribed, setSubscribed] = useState(false);
+  const subscribe = () => {
+    triggerAPIRequest(
+      `${apis.answers.subscribe}`,
+      HTTP_POST,
+      {
+        question,
+        answer,
+        first_score,
+        document_title,
+        concrete_answer
+      }
+    )
+      .then(({ message }) => {
+        antdMessage.success(message);
+        setSubscribed(true);
+      })
+  }
+ 
   return (
     <AnswerContainer>
       <DocumentTitle>
-        <FileOutlined />
-        来自文章 {document_title}
+        <span>
+          <FileOutlined />
+          来自文章 {document_title}
+        </span>
+        {!subscribed ? (
+          <HeartOutlined onClick={subscribe} style={{ fontSize: '20px', color: '#F81D52' }}/>
+        ) : (
+          <HeartFilled style={{ fontSize: 20, color: '#F81D52' }} />
+        )}
+       
       </DocumentTitle>
       <Score>该答案的检索得分为{first_score.toFixed(2)}</Score>
       <Answer>
@@ -64,7 +92,7 @@ const QuestionAnswering = () => {
   }
 
   const onSearch = () => {
-    triggerAPIRequest(`${apis.answers}/?question=${question}&lang=${lang}`, HTTP_GET)
+    triggerAPIRequest(`${apis.qa}/?question=${question}&lang=${lang}`, HTTP_GET)
       .then((data) => {
         const { answers } = data
         setAnswers(answers)
@@ -126,13 +154,15 @@ const QuestionAnswering = () => {
           <ContentContainer>
             {answers?
               answers.map((item) => 
-                <AnswerBox 
+                <AnswerBox
+                  question={question} 
                   answer={item.answer}
                   first_score={item.first_score}
                   document_title={item.document_title}
                   concrete_answer={item.concrete_answer}
+                  key={item.answer}
                 />
-              ) : <Skeleton />
+              ) : <Empty description="请通过上方输入框，进行提问"/>
             }
           </ContentContainer>
           
