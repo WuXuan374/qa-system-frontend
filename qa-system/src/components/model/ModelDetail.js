@@ -1,4 +1,4 @@
-import { Breadcrumb, Card, Descriptions, Popover, Skeleton, Statistic } from 'antd';
+import { Breadcrumb, Card, Descriptions, Input, PageHeader, Popover, Skeleton, Statistic } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { 
@@ -9,6 +9,7 @@ import {
 import QAPage from '../common/QAPage';
 import { ChartContainer } from './style';
 import { Bar, BarChart, CartesianGrid, Label, Legend, Tooltip, XAxis, YAxis } from 'recharts';
+import { useParams } from 'react-router';
 
 const LabelWithTips = (props) => {
   const { label, tips } = props;
@@ -22,9 +23,11 @@ const LabelWithTips = (props) => {
   )
 }
 
-const ModelEvaluation = () => {
+const ModelDetail = (props) => {
   const [evaluationData, setEvaluationData] = useState([]);
   const [modelDetail, setModelDetail] = useState();
+
+  const { model_name } = useParams();
 
   const getEvaluationResults = (model_name) => {
     triggerAPIRequest(`${apis.model.evaluation}/?model_name=${model_name}`, HTTP_GET)
@@ -41,8 +44,8 @@ const ModelEvaluation = () => {
   };
 
   useEffect(() => {
-    getEvaluationResults('BiDAF');
-    getModelDetail('BiDAF');
+    getEvaluationResults(model_name || 'BiDAF');
+    getModelDetail(model_name || 'BiDAF');
   }, []);
 
   // Loss 图表数据
@@ -86,13 +89,20 @@ const ModelEvaluation = () => {
         <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
           <Breadcrumb.Item>Model</Breadcrumb.Item>
-          <Breadcrumb.Item>Evaluation</Breadcrumb.Item>
+          <Breadcrumb.Item>Detail</Breadcrumb.Item>
         </Breadcrumb>
       )}
     >
       <Card style={{ margin: 10 }}>
+        <div>
+          <PageHeader
+            title='模型详情'
+            subTitle='展示模型的参数配置与评测结果'
+            onBack={() => props.history.goBack()}
+          />
+        </div>
         {modelDetail ? (
-          <Descriptions title="模型详情" colon=":" column={12}>
+          <Descriptions colon=":" column={12} style={{ margin: 10 }}>
             <Descriptions.Item label="模型名称" span={3}>{name}</Descriptions.Item>
             <Descriptions.Item label="训练数据集" span={3}>{dataset}</Descriptions.Item>
             <Descriptions.Item label="词向量维度" span={3}>{word_dimension}</Descriptions.Item>
@@ -177,4 +187,4 @@ const ModelEvaluation = () => {
   );
 };
 
-export default ModelEvaluation;
+export default ModelDetail;

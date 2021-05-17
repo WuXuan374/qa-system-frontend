@@ -27,6 +27,7 @@ function QAPage(props) {
           defaultSelectedKeys={['1']} 
           mode="inline" 
           style={{ height: '100%', borderRight: 0 }}
+          defaultOpenKeys={['sub1']}
         >
           <Menu.Item key="/qa" icon={<PieChartOutlined />}>
             <Link to="/qa">我要提问</Link>
@@ -35,11 +36,14 @@ function QAPage(props) {
             <Link to="/history">历史问题</Link>
           </Menu.Item>
           <SubMenu key="sub1" icon={<UserOutlined />} title="模型">
-            <Menu.Item key="/model/train">
-              <Link to="/model/train">模型训练</Link>
+            <Menu.Item key="/model/create">
+              <Link to="/model/create">模型创建</Link>
             </Menu.Item>
-            <Menu.Item key="/model/evaluation">
-              <Link to="/model/evaluation">模型评测</Link>
+            <Menu.Item key="/model/list">
+              <Link to="/model/list">模型列表</Link>
+            </Menu.Item>
+            <Menu.Item key="/model/detail/BiDAF">
+              <Link to="/model/detail/BiDAF">模型详情</Link>
             </Menu.Item>
           </SubMenu>
         </Menu>
