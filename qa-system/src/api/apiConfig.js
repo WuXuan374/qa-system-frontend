@@ -10,6 +10,7 @@ export const apis = {
   hints: 'qa/hints',
   model: {
     evaluation: 'model/evaluation',
+    detail: 'model/info',
   }
 }
 

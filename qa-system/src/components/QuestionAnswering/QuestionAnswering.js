@@ -1,5 +1,5 @@
 import '../../App.css';
-import { AutoComplete, Button, Select,  Layout, Breadcrumb, Card, Affix, Radio } from 'antd';
+import { AutoComplete, Button, Select,  Layout, Breadcrumb, Card, Affix, Radio, Skeleton } from 'antd';
 import {
   BodyContainer,
   ButtonsContainer,
@@ -43,7 +43,7 @@ const QuestionAnswering = () => {
   // hooks
   const [question, setQuestion] = useState("")
   const [hints, setHints] = useState([])
-  const [answers, setAnswers] = useState([])
+  const [answers, setAnswers] = useState()
   const [lang, setLang] = useState("en");
   
   useEffect(() =>
@@ -124,7 +124,7 @@ const QuestionAnswering = () => {
 
         <Card style={{ margin: 10, minHeight: 400 }}>
           <ContentContainer>
-            {
+            {answers?
               answers.map((item) => 
                 <AnswerBox 
                   answer={item.answer}
@@ -132,7 +132,7 @@ const QuestionAnswering = () => {
                   document_title={item.document_title}
                   concrete_answer={item.concrete_answer}
                 />
-              )
+              ) : <Skeleton />
             }
           </ContentContainer>
           

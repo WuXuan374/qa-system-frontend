@@ -1,4 +1,5 @@
-import { Breadcrumb, Card, Descriptions } from 'antd';
+import { Breadcrumb, Card, Descriptions, Popover, Skeleton, Statistic } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { 
   apis, 
@@ -6,45 +7,78 @@ import {
   HTTP_GET,
 } from '../../api/apiConfig';
 import QAPage from '../common/QAPage';
-import { ChartContainer, ContentContainer } from './style';
-import { Bar, BarChart, CartesianGrid, Label, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { ChartContainer } from './style';
+import { Bar, BarChart, CartesianGrid, Label, Legend, Tooltip, XAxis, YAxis } from 'recharts';
+
+const LabelWithTips = (props) => {
+  const { label, tips } = props;
+  return (
+    <span>
+      <span style={{ marginRight: 5 }}>{label}</span>
+      <Popover content={tips}>
+        <QuestionCircleOutlined />
+      </Popover>
+    </span>
+  )
+}
 
 const ModelEvaluation = () => {
-  const [data, setData] = useState([]);
+  const [evaluationData, setEvaluationData] = useState([]);
+  const [modelDetail, setModelDetail] = useState();
+
   const getEvaluationResults = (model_name) => {
     triggerAPIRequest(`${apis.model.evaluation}/?model_name=${model_name}`, HTTP_GET)
       .then((data) => {
-        setData(data)
+        setEvaluationData(data)
+      })
+  };
+
+  const getModelDetail = (model_name) => {
+    triggerAPIRequest(`${apis.model.detail}/?model_name=${model_name}`, HTTP_GET)
+      .then((data) => {
+        setModelDetail(data)
       })
   };
 
   useEffect(() => {
     getEvaluationResults('BiDAF');
+    getModelDetail('BiDAF');
   }, []);
 
   // Loss 图表数据
   const lossData = useMemo(() => (
-    data.map(item => ({
+    evaluationData.map(item => ({
       'epoch': item.epoch,
       'loss': item.loss
     }))
-  ), [data]);
+  ), [evaluationData]);
 
-  // // EM 图表数据
+  // EM 图表数据
   const EMData = useMemo(() => (
-    data.map(item => ({
+    evaluationData.map(item => ({
       'epoch': item.epoch,
       'EM': item.exactMatch
     }))
-  ), [data]);
+  ), [evaluationData]);
 
-  // // F1 图表数据
+  // F1 图表数据
   const f1Data = useMemo(() => (
-    data.map(item => ({
+    evaluationData.map(item => ({
       'epoch': item.epoch,
       'F1': item.f1
     }))
-  ), [data]);
+  ), [evaluationData]);
+
+  const {
+    name,
+    dataset,
+    word_dimension,
+    batch_size,
+    character_dimension,
+    dropout_rate,
+    learning_rate,
+    context_len
+  } = modelDetail || {};
 
   return (
     <QAPage
@@ -57,15 +91,35 @@ const ModelEvaluation = () => {
       )}
     >
       <Card style={{ margin: 10 }}>
-        <Descriptions title="User Info">
-          <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
-          <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-          <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
-          <Descriptions.Item label="Remark">empty</Descriptions.Item>
-          <Descriptions.Item label="Address">
-            No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-          </Descriptions.Item>
-        </Descriptions>
+        {modelDetail ? (
+          <Descriptions title="模型详情" colon=":" column={12}>
+            <Descriptions.Item label="模型名称" span={3}>{name}</Descriptions.Item>
+            <Descriptions.Item label="训练数据集" span={3}>{dataset}</Descriptions.Item>
+            <Descriptions.Item label="词向量维度" span={3}>{word_dimension}</Descriptions.Item>
+            <Descriptions.Item label="Batch Size" span={3}>{batch_size}</Descriptions.Item>
+            <Descriptions.Item label="字符嵌入维度" span={3}>{character_dimension}</Descriptions.Item>
+            <Descriptions.Item 
+              label={
+                <LabelWithTips 
+                  label="Dropout Rate" 
+                  tips="通过忽略特征检测器，避免过拟合" 
+                />
+                } 
+              span={3}
+            >
+              {dropout_rate}
+            </Descriptions.Item>
+            <Descriptions.Item label={<LabelWithTips label="Learning Rate" tips="优化器的学习速率" />} span={3}>
+              {learning_rate}
+            </Descriptions.Item>
+            <Descriptions.Item label={<LabelWithTips label="Context Length" tips="数据集中，所选取文章的最大长度" />} span={3}>
+              {context_len}
+            </Descriptions.Item>
+          </Descriptions>
+        ) : (
+          <Skeleton active />
+        )}
+        
       </Card>
 
       <Card style={{ margin: 10 }}>
